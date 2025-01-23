@@ -9,7 +9,7 @@ You should have a codespaces.new link provided to you by your trainer. Use that 
 Alternatively, if you would like to progress from this page, 
 1. Click on 'Codespaces' in the left toolbar
 2. Click on the green button labelleed 'New codespace' at the top-right corner of GitHub 
-3. Select 'Tinkercademy/phaser-dino-game' as your repository
+3. Select 'tinkercademy/phaser-pong-game' as your repository
 4. Ensure that Branch is 'main', Region is 'Southeast Asia' and Machine type is '2-core' (very highly recommended but not compulsory)
 
 ## Stopping and Deleting your Codespace
