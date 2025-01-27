@@ -35,9 +35,31 @@ export class Game extends Scene {
 
         // Listen for "keyspace down" event, calling startBall function upon press
         this.input.keyboard.on('keydown-SPACE', this.startBall, this);
+
+        // Assigns U/D/L/R keys to the cursors variable
+        this.cursors = this.input.keyboard.createCursorKeys();
+        // Assigns W/S keys to the wasd variable
+        this.wasd = this.input.keyboard.addKeys({ 
+            up: Phaser.Input.Keyboard.KeyCodes.W, 
+            down: Phaser.Input.Keyboard.KeyCodes.S 
+        });
+
     }
 
     update() {
+        // leftPaddle movement logic
+        if (this.wasd.up.isDown && this.leftPaddle.y > 0) {
+            this.leftPaddle.y -= 5;
+        } else if (this.wasd.down.isDown && this.leftPaddle.y < HEIGHT) {
+            this.leftPaddle.y += 5;
+        }
+
+        // rightPaddle movement logic
+        if (this.cursors.up.isDown && this.rightPaddle.y > 0) {
+            this.rightPaddle.y -= 5;
+        } else if (this.cursors.down.isDown && this.rightPaddle.y < HEIGHT) {
+            this.rightPaddle.y += 5;
+        }
     }
 
     startBall() {
