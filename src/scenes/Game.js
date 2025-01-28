@@ -56,8 +56,8 @@ export class Game extends Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         // Assigns W/S keys to the wasd variable
         this.wasd = this.input.keyboard.addKeys({
-            up: Phaser.Input.Keyboard.KeyCodes.W, 
-            down: Phaser.Input.Keyboard.KeyCodes.S 
+            up: Phaser.Input.Keyboard.KeyCodes.W,
+            down: Phaser.Input.Keyboard.KeyCodes.S
         });
 
         this.leftScoreText = this.add.text(100, 50, '0', { fontSize: '50px' });
@@ -102,14 +102,21 @@ export class Game extends Scene {
     }
 
     resetBall() {
-        this.ball.setPosition(WIDTH/2, 384);
+        this.ball.setPosition(WIDTH / 2, 384);
         this.ball.setVelocity(0, 0);
         this.ballInMotion = false;
         this.startBall()
     }
 
-    hitPaddle() {
-        
+    hitPaddle(ball, paddle) {
+        let velocityFactor = 1.3;
+        let newVelocityX = ball.body.velocity.x * velocityFactor;
+        let newVelocityY = ball.body.velocity.y * velocityFactor;
+
+        let angleDeviationInDeg = Phaser.Math.Between(-30, 30);
+        let angleDeviationInRad = Phaser.Math.DegToRad(angleDeviationInDeg)
+        let newVelocity = new Phaser.Math.Vector2(newVelocityX, newVelocityY).rotate(angleDeviationInRad);
+        ball.setVelocity(newVelocity.x, newVelocity.y);
     }
-    
+
 }
