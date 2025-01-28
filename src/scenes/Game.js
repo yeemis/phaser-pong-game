@@ -16,6 +16,12 @@ export class Game extends Scene {
 
         // Flag to determine if the ball is in motion
         this.ballInMotion = false;
+
+        // Points logic
+        this.leftScore = 0;
+        this.rightScore = 0;
+        this.leftScoreText = null;
+        this.rightScoreText = null;
     }
 
     preload() {
@@ -53,6 +59,9 @@ export class Game extends Scene {
             up: Phaser.Input.Keyboard.KeyCodes.W, 
             down: Phaser.Input.Keyboard.KeyCodes.S 
         });
+
+        this.leftScoreText = this.add.text(100, 50, '0', { fontSize: '50px' });
+        this.rightScoreText = this.add.text(924, 50, '0', { fontSize: '50px' });
     }
 
     update() {
@@ -69,6 +78,18 @@ export class Game extends Scene {
         } else if (this.cursors.down.isDown && this.rightPaddle.y < HEIGHT) {
             this.rightPaddle.y += 5;
         }
+
+        // Fail condition check
+        const margin = 30;
+        if (this.ball.x < margin) { // ball hits left wall
+            this.rightScore += 1;
+            this.rightScoreText.setText(this.rightScore);
+            this.resetBall();
+        } else if (this.ball.x > WIDTH - margin) { // ball hits right wall
+            this.leftScore += 1;
+            this.leftScoreText.setText(this.leftScore);
+            this.resetBall();
+        }
     }
 
     startBall() {
@@ -78,6 +99,13 @@ export class Game extends Scene {
             this.ball.setVelocity(initialVelocityX, initialVelocityY); // sets ball to RANDOM velocity
             this.ballInMotion = true; // sets flag to ball is in motion
         }
+    }
+
+    resetBall() {
+        this.ball.setPosition(WIDTH/2, 384);
+        this.ball.setVelocity(0, 0);
+        this.ballInMotion = false;
+        this.startBall()
     }
 
     hitPaddle() {
