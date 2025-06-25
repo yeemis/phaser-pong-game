@@ -19,9 +19,10 @@ export class Game extends Scene {
 
     create() {
         this.add.image(WIDTH/2,HEIGHT/2,'background').setScale(0.8,0.8);
-        this.ball = this.add.image(WIDTH/2,HEIGHT/2,'ball').setScale(0.05,0.05);
+        this.ball = this.physics.add.image(WIDTH/2,HEIGHT/2,'ball').setScale(0.05,0.05).refreshBody();
         this.leftPaddle = this.add.image(50,382,'paddle');
         this.rightPaddle = this.add.image(974,384,"paddle");
+        
     }
 
     update() {

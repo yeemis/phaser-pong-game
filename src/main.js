@@ -10,7 +10,7 @@ const config = {
             debug: false
         }
 
-    }
+    },
     type: AUTO,
     width: 1024,
     height: 768,
