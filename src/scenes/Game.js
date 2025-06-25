@@ -34,9 +34,6 @@ export class Game extends Scene {
             up: Phaser.Input.Keyboard.KeyCodes.W,
             down: Phaser.Input.Keyboard.KeyCodes.S,
         });
-    }
-
-    update() {
         if(this.wasd.up.isDown){
             this.leftPaddle.y -= 5;
         }else if(this.wasd.down.isDown){
@@ -47,6 +44,10 @@ export class Game extends Scene {
         }else if(this.cursors.down.isDown){
             this.rightPaddle.y += 5;
         }
+    }
+
+    update() {
+        
     }
     startball() {
         if (!this.ballInMotion) {
