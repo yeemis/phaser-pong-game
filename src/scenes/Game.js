@@ -30,7 +30,7 @@ export class Game extends Scene {
         this.rightPaddle = this.add.image(974,384,"paddle");
         this.input.keyboard.on('keydown-SPACE', this.startball, this);
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.wasd = this.input.keyboard.addkeys({
+        this.wasd = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             down: Phaser.Input.Keyboard.KeyCodes.S
         });
