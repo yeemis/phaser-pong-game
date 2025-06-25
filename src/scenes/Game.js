@@ -12,6 +12,10 @@ export class Game extends Scene {
         this.ballInMotion = false;
         this.cursors = null;
         this.wasd = null;
+        this.leftscore = 0;
+        this.rightscore = 0;
+        this.leftscoretext = null;
+        this.rightscoretext = null;
     }
 
     preload() {
@@ -38,6 +42,8 @@ export class Game extends Scene {
             up: Phaser.Input.Keyboard.KeyCodes.W,
             down: Phaser.Input.Keyboard.KeyCodes.S
         });
+        this.leftscoretext = this.add.text(100,50,'0',{fontSize: '50px'});
+        this.rightscoretext = this.add.text(900,50,'0',{fontSize: '50px'});
     }
 
     update() {
@@ -53,6 +59,16 @@ export class Game extends Scene {
         }else if(this.cursors.down.isDown && this.rightPaddle.y < HEIGHT){
             this.rightPaddle.y += 5;
         }
+        const margin = 30;
+        if (this.ball.x < margin){
+            this.rightscore += 1;
+            this.rightscoretext.setText(this.rightscore);
+            this.resetBall();
+        }else if (this.ball.x > WIDTH - margin) {
+            this.leftscore += 1;
+            this.leftscoretext.setText(this.leftscore);
+            this.resetBall();
+        }
         
     }
     startball() {
@@ -66,6 +82,12 @@ export class Game extends Scene {
     hitPaddle(ball, paddle) {
         
         
+    }
+    resetBall(){
+        this.ball.setPosition(WIDTH/2, 384);
+        this.ball.setVelocity(0, 0);
+        this.ballInMotion = false;
+        this.startball()
     }
 
 }
