@@ -34,7 +34,7 @@ export class Game extends Scene {
             up: Phaser.Input.Keyboard.KeyCodes.W,
             down: Phaser.Input.Keyboard.KeyCodes.S,
         });
-        if(this.wasd.up.isDown){
+       if(this.wasd.up.isDown){
             this.leftPaddle.y -= 5;
         }else if(this.wasd.down.isDown){
             this.leftPaddle.y += 5;
