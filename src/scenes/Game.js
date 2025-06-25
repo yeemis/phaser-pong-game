@@ -83,8 +83,10 @@ export class Game extends Scene {
         let velocityFactor = 1.3;
         let newVelocityX = ball.body.velocity.x * velocityFactor;
         let newVelocityY = ball.body.velocity.y * velocityFactor;
-        ball.setVelocity(newVelocityX, newVelocityY); 
-        
+        let angleDeviationinDEG = Phaser.Math.Between(-30, 30);
+        let angleInRadians = Phaser.Math.DegToRad(angleDeviationinDEG);
+        let newVelocity = new Phaser.Math.Vector2(newVelocityX, newVelocityY).rotate(angleInRadians); 
+        ball.setVelocity(newVelocity.x, newVelocity.y);
     }
     resetBall(){
         this.ball.setPosition(WIDTH/2, 384);
