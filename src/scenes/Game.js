@@ -80,7 +80,10 @@ export class Game extends Scene {
         }
     }
     hitPaddle(ball, paddle) {
-        
+        let velocityFactor = 1.3;
+        let newVelocityX = ball.body.velocity.x * velocityFactor;
+        let newVelocityY = ball.body.velocity.y * velocityFactor;
+        ball.setVelocity(newVelocityX, newVelocityY); 
         
     }
     resetBall(){
