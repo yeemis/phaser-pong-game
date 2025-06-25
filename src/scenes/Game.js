@@ -26,8 +26,12 @@ export class Game extends Scene {
         this.ball.setCollideWorldBounds(true);
         this.ball.setBounce(1,1);
         this.ball.setVelocity(200,200);
-        this.leftPaddle = this.add.image(50,382,'paddle');
-        this.rightPaddle = this.add.image(974,384,"paddle");
+        this.leftPaddle = this.physics.add.image(50,382,'paddle');
+        this.leftPaddle.setImmovable(true);
+        this.phyysics.add.collider(this.ball, this.leftPaddle,this.hitPaddle,null,this);
+        this.rightPaddle = this.physics.add.image(974,384,"paddle");
+        this.rightPaddle.setImmovable(true);
+        this.physics.add.collider(this.ball, this.rightPaddle,this.hitPaddle,null,this);
         this.input.keyboard.on('keydown-SPACE', this.startball, this);
         this.cursors = this.input.keyboard.createCursorKeys();
         this.wasd = this.input.keyboard.addKeys({
@@ -58,6 +62,10 @@ export class Game extends Scene {
             this.ball.setVelocity(initialVelocityX, initialVelocityY);
             this.ballInMotion = true;
         }
+    }
+    hitPaddle(ball, paddle) {
+        
+        
     }
 
 }
