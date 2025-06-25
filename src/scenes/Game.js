@@ -9,6 +9,7 @@ export class Game extends Scene {
         this.ball = null;
         this.leftPaddle = null;
         this.rightPaddle = null;
+        this.ballInMotion = false;
     }
 
     preload() {
@@ -20,12 +21,24 @@ export class Game extends Scene {
     create() {
         this.add.image(WIDTH/2,HEIGHT/2,'background').setScale(0.8,0.8);
         this.ball = this.physics.add.image(WIDTH/2,HEIGHT/2,'ball').setScale(0.05,0.05).refreshBody();
+        this.ball.setCollideWorldBounds(true);
+        this.ball.setBounce(1,1);
+        this.ball.setVelocity(200,200);
         this.leftPaddle = this.add.image(50,382,'paddle');
         this.rightPaddle = this.add.image(974,384,"paddle");
+        this.input.keyboard.on('keydown-SPACE', this.startball, this);
         
     }
 
     update() {
+    }
+    startball() {
+        if (!this.ballInMotion) {
+            let initialVelocityX = 200 * (Phaser.Math.Between(0,1)? 1 : -1);
+            let initialVelocityY = 200 * (Phaser.Math.Between(0,1)? 1 : -1);
+            this.ball.setVelocity(initialVelocityX, initialVelocityY);
+            this.ballInMotion = true;
+        }
     }
 
 }
