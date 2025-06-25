@@ -32,21 +32,23 @@ export class Game extends Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         this.wasd = this.input.keyboard.addkeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
-            down: Phaser.Input.Keyboard.KeyCodes.S,
+            down: Phaser.Input.Keyboard.KeyCodes.S
         });
-       if(this.wasd.up.isDown){
-            this.leftPaddle.y -= 5;
-        }else if(this.wasd.down.isDown){
-            this.leftPaddle.y += 5;
-        }
-        if(this.cursors.up.isDown){
-            this.rightPaddle.y -= 5;
-        }else if(this.cursors.down.isDown){
-            this.rightPaddle.y += 5;
-        }
     }
 
     update() {
+        if(this.wasd.up.isDown && this.leftPaddle.y > 0){
+            this.leftPaddle.y -= 5;
+        }else if(this.wasd.down.isDown &&this.leftPaddle.y < HEIGHT){
+            this.leftPaddle.y += 5;
+        }
+
+
+        if(this.cursors.up.isDown && this.rightPaddle.y > 0){
+            this.rightPaddle.y -= 5;
+        }else if(this.cursors.down.isDown && this.rightPaddle.y < HEIGHT){
+            this.rightPaddle.y += 5;
+        }
         
     }
     startball() {
