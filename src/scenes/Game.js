@@ -28,7 +28,7 @@ export class Game extends Scene {
         this.ball.setVelocity(200,200);
         this.leftPaddle = this.physics.add.image(50,382,'paddle');
         this.leftPaddle.setImmovable(true);
-        this.phyysics.add.collider(this.ball, this.leftPaddle,this.hitPaddle,null,this);
+        this.physics.add.collider(this.ball, this.leftPaddle,this.hitPaddle,null,this);
         this.rightPaddle = this.physics.add.image(974,384,"paddle");
         this.rightPaddle.setImmovable(true);
         this.physics.add.collider(this.ball, this.rightPaddle,this.hitPaddle,null,this);
