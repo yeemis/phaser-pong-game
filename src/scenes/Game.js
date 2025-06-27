@@ -16,12 +16,15 @@ export class Game extends Scene {
         this.rightscore = 0;
         this.leftscoretext = null;
         this.rightscoretext = null;
+        this.paddleSpeed = 5;
     }
 
     preload() {
         this.load.image('background','assets/background.png');
         this.load.image('ball','assets/ball.png');
         this.load.image('paddle','assets/paddle.png');
+        this.load.image('speedup','assets/speedup.png');
+        this.load.image('slowdown','assets/slowdown.png');
     }
 
     create() {
@@ -44,20 +47,31 @@ export class Game extends Scene {
         });
         this.leftscoretext = this.add.text(100,50,'0',{fontSize: '50px'});
         this.rightscoretext = this.add.text(900,50,'0',{fontSize: '50px'});
+        this.powerups = this.physics.add.group();
+
+        this.physics.add.overlap(this.leftPaddle, this.powerups, this.collectPowerup, null, this);
+        this.physics.add.overlap(this.rightPaddle, this.powerups, this.collectPowerup, null, this);
+
+        this.time.addEvent({
+            delay: 50,
+            callback: this.spawnPowerup,
+            callbackScope: this,
+            loop: true
+        });
     }
 
     update() {
         if(this.wasd.up.isDown && this.leftPaddle.y > 0){
-            this.leftPaddle.y -= 5;
+            this.leftPaddle.y -= this.paddleSpeed;
         }else if(this.wasd.down.isDown &&this.leftPaddle.y < HEIGHT){
-            this.leftPaddle.y += 5;
+            this.leftPaddle.y += this.paddleSpeed;
         }
 
 
         if(this.cursors.up.isDown && this.rightPaddle.y > 0){
-            this.rightPaddle.y -= 5;
+            this.rightPaddle.y -= this.paddleSpeed;
         }else if(this.cursors.down.isDown && this.rightPaddle.y < HEIGHT){
-            this.rightPaddle.y += 5;
+            this.rightPaddle.y += this.paddleSpeed;
         }
         const margin = 30;
         if (this.ball.x < margin){
@@ -93,6 +107,36 @@ export class Game extends Scene {
         this.ball.setVelocity(0, 0);
         this.ballInMotion = false;
         this.startball()
+    }
+    spawnPowerup() {
+        const types = ['speedup', 'powerup_slow', 'powerup_score'];
+        const type = Phaser.Utils.Array.GetRandom(types);
+        const x = Phaser.Math.Between(50 || 200);
+        const y = Phaser.Math.Between(0, 668);
+        this.powerups.create(x, y, type).setScale(0.05, 0.05);
+    }
+    collectPowerup(paddle, powerup) {
+        if (powerup.texture.key === 'speedup') {
+            // Speed up paddles for 5 seconds
+            this.paddleSpeed = 10;
+            this.time.delayedCall(5000, () => { this.paddleSpeed = 5; });
+        } else if (powerup.texture.key === 'powerup_slow') {
+            // Slow down ball for 5 seconds
+            this.ball.setVelocity(this.ball.body.velocity.x * 0.5, this.ball.body.velocity.y * 0.5);
+            this.time.delayedCall(5000, () => {
+                this.ball.setVelocity(this.ball.body.velocity.x * 2, this.ball.body.velocity.y * 2);
+            });
+        } else if (powerup.texture.key === 'powerup_score') {
+            // Give free score to the paddle that collected it
+            if (paddle === this.leftPaddle) {
+                this.leftscore += 1;
+                this.leftscoretext.setText(this.leftscore);
+            } else if (paddle === this.rightPaddle) {
+                this.rightscore += 1;
+                this.rightscoretext.setText(this.rightscore);
+            }
+        }
+        powerup.destroy();
     }
 
 }
