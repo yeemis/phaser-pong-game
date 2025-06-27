@@ -16,7 +16,8 @@ export class Game extends Scene {
         this.rightscore = 0;
         this.leftscoretext = null;
         this.rightscoretext = null;
-        this.paddleSpeed = 5;
+        this.leftPaddleSpeed = 5;
+        this.rightPaddleSpeed = 5;
     }
 
     preload() {
@@ -53,7 +54,7 @@ export class Game extends Scene {
         this.physics.add.overlap(this.rightPaddle, this.powerups, this.collectPowerup, null, this);
 
         this.time.addEvent({
-            delay: 50,
+            delay: 5000,
             callback: this.spawnPowerup,
             callbackScope: this,
             loop: true
@@ -62,16 +63,16 @@ export class Game extends Scene {
 
     update() {
         if(this.wasd.up.isDown && this.leftPaddle.y > 0){
-            this.leftPaddle.y -= this.paddleSpeed;
+            this.leftPaddle.y -= this.leftPaddleSpeed;
         }else if(this.wasd.down.isDown &&this.leftPaddle.y < HEIGHT){
-            this.leftPaddle.y += this.paddleSpeed;
+            this.leftPaddle.y += this.leftPaddleSpeed;
         }
 
 
         if(this.cursors.up.isDown && this.rightPaddle.y > 0){
-            this.rightPaddle.y -= this.paddleSpeed;
+            this.rightPaddle.y -= this.rightPaddleSpeed;
         }else if(this.cursors.down.isDown && this.rightPaddle.y < HEIGHT){
-            this.rightPaddle.y += this.paddleSpeed;
+            this.rightPaddle.y += this.rightPaddleSpeed;
         }
         const margin = 30;
         if (this.ball.x < margin){
@@ -109,18 +110,28 @@ export class Game extends Scene {
         this.startball()
     }
     spawnPowerup() {
-        const types = ['speedup', 'powerup_slow', 'powerup_score'];
+        const types = ['speedup', 'slowdown', 'powerup_score'];
         const type = Phaser.Utils.Array.GetRandom(types);
-        const x = Phaser.Math.Between(50 || 200);
-        const y = Phaser.Math.Between(0, 668);
-        this.powerups.create(x, y, type).setScale(0.05, 0.05);
+        // Choose randomly between left line (x=100) and right line (x=924)
+        const xPositions = [50, 974];
+        const x = Phaser.Utils.Array.GetRandom(xPositions);
+
+        // Random y within visible area, leaving some margin
+        const y = Phaser.Math.Between(80, HEIGHT - 80);
+
+        this.powerups.create(x, y, type).setScale(0.1, 0.1);
     }
     collectPowerup(paddle, powerup) {
         if (powerup.texture.key === 'speedup') {
-            // Speed up paddles for 5 seconds
-            this.paddleSpeed = 10;
-            this.time.delayedCall(5000, () => { this.paddleSpeed = 5; });
-        } else if (powerup.texture.key === 'powerup_slow') {
+            // Only the collecting paddle gets the speed boost
+            if (paddle === this.leftPaddle) {
+                this.leftPaddleSpeed = 10;
+                this.time.delayedCall(5000, () => { this.leftPaddleSpeed = 5; });
+            } else if (paddle === this.rightPaddle) {
+                this.rightPaddleSpeed = 10;
+                this.time.delayedCall(5000, () => { this.rightPaddleSpeed = 5; });
+            }
+        } else if (powerup.texture.key === 'slowdown') {
             // Slow down ball for 5 seconds
             this.ball.setVelocity(this.ball.body.velocity.x * 0.5, this.ball.body.velocity.y * 0.5);
             this.time.delayedCall(5000, () => {
